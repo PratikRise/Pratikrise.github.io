@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pratik | Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== RANG: yahin se badlo ===== */
+  :root{--bg:#07061a;--ink:#f4f2ff;--mute:#9a96c8;--v:#7c5cff;--c:#22d3ee;--p:#ff4d8d;--glass:rgba(20,17,60,.55)}
+  @property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;line-height:1.6;overflow-x:hidden}
+  #bg{position:fixed;inset:0;z-index:0}
+  #bar{position:fixed;top:0;left:0;height:3px;width:100%;z-index:20;transform-origin:0 50%;transform:scaleX(0);
+       background:linear-gradient(90deg,var(--v),var(--c),var(--p))}
+  #cur{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid var(--c);
+       border-radius:50%;z-index:30;pointer-events:none;mix-blend-mode:screen;transition:width .2s,height .2s,margin .2s,background .2s}
+  #cur.big{width:70px;height:70px;margin:-35px 0 0 -35px;background:rgba(34,211,238,.15)}
+  @media (pointer:coarse){#cur{display:none}}
+  #loader{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-content:center;text-align:center;
+          font-family:'Unbounded',sans-serif;transition:opacity .8s .2s,visibility 1s .2s}
+  #loader b{font-size:clamp(4rem,14vw,9rem);font-weight:800;background:linear-gradient(90deg,var(--v),var(--c),var(--p));
+            -webkit-background-clip:text;background-clip:text;color:transparent}
+  #loader i{display:block;height:3px;background:#1d1a4d;margin-top:10px;border-radius:3px;overflow:hidden}
+  #loader i span{display:block;height:100%;width:0;background:var(--c)}
+  body.go #loader{opacity:0;visibility:hidden}
+  nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:20px 5vw}
+  nav b{font-family:'Unbounded',sans-serif;font-size:1rem}
+  nav a{color:var(--mute);text-decoration:none;margin-left:22px;font-size:.95rem;transition:color .2s}
+  nav a:hover{color:var(--c)}
+  main{position:relative;z-index:2}
+  section{min-height:100vh;padding:120px 5vw 80px;display:flex;flex-direction:column;justify-content:center;max-width:1180px;margin:auto}
+  h1,h2{font-family:'Unbounded',sans-serif;font-weight:800}
+  #name{font-size:clamp(3.4rem,15vw,11rem);line-height:.95;letter-spacing:-.04em;perspective:600px}
+  #name span{display:inline-block;opacity:0;transform:translateY(60%) rotateX(-90deg);
+             background:linear-gradient(180deg,#fff,#b8a9ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  body.go #name span{animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*90ms + .5s)}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .sub{font-size:clamp(1.1rem,2.4vw,1.6rem);color:var(--mute);margin:22px 0 34px;min-height:2em}
+  .sub em{color:var(--c);font-style:normal}
+  .btn{display:inline-block;padding:15px 30px;border-radius:50px;font-weight:700;text-decoration:none;color:#fff;
+       background:linear-gradient(120deg,var(--v),var(--p));box-shadow:0 10px 40px -10px var(--v);transition:transform .15s,box-shadow .2s}
+  .btn:hover{box-shadow:0 14px 50px -6px var(--p)}
+  .btn.ghost{background:transparent;border:1.5px solid var(--c);color:var(--c);box-shadow:none;margin-left:10px}
+  .hint{margin-top:60px;color:var(--mute);font-size:.85rem;display:flex;align-items:center;gap:12px}
+  .hint s{width:2px;height:46px;background:linear-gradient(var(--c),transparent);animation:drop 1.6s infinite}
+  @keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+  h2{font-size:clamp(2rem,6vw,4rem);letter-spacing:-.03em;margin-bottom:12px}
+  .lead{color:var(--mute);max-width:520px;margin-bottom:40px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
+  .tilt{position:relative;background:var(--glass);border:1px solid #3a3685;border-radius:22px;padding:30px;
+        backdrop-filter:blur(14px);transition:transform .2s ease-out;transform-style:preserve-3d;overflow:hidden}
+  .tilt::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+        background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.14),transparent 60%)}
+  .tilt:hover::after{opacity:1}
+  .tilt h3{font-family:'Unbounded',sans-serif;font-size:1.15rem;margin:14px 0 8px}
+  .tilt p{color:var(--mute)}
+  .ic{width:54px;height:54px;border-radius:16px;display:grid;place-content:center;font-size:1.6rem;
+      background:linear-gradient(135deg,var(--v),var(--c))}
+  .tilt:nth-child(2) .ic{background:linear-gradient(135deg,var(--c),var(--p))}
+  .tilt:nth-child(3) .ic{background:linear-gradient(135deg,var(--p),var(--v))}
+  .price{font-family:'Unbounded',sans-serif;font-size:clamp(2.4rem,5vw,3.4rem);font-weight:800;margin:10px 0}
+  .price small{font:400 .9rem 'Manrope';color:var(--mute)}
+  .tilt ul{list-style:none;padding:0;margin:14px 0 22px;color:var(--mute)}
+  .tilt li{padding:7px 0;border-top:1px solid #2f2b6e}
+  .tilt li::before{content:"✓ ";color:var(--c)}
+  .pay{display:block;text-align:center;width:100%}
+  .pop{border:2px solid transparent;transform:scale(1.04);
+       background:linear-gradient(#150f45,#150f45) padding-box,conic-gradient(from var(--a),var(--v),var(--c),var(--p),var(--v)) border-box;
+       animation:spin 5s linear infinite}
+  @keyframes spin{to{--a:360deg}}
+  .tag{position:absolute;top:16px;right:16px;font-size:.75rem;background:var(--p);padding:3px 12px;border-radius:20px;font-weight:700}
+  .marq{position:relative;z-index:2;overflow:hidden;padding:26px 0;border-block:1px solid #2f2b6e;background:rgba(7,6,26,.6);backdrop-filter:blur(6px)}
+  .marq div{display:flex;gap:50px;width:max-content;animation:mq 22s linear infinite;font:800 clamp(1.6rem,4vw,2.6rem) 'Unbounded';color:transparent;-webkit-text-stroke:1px var(--mute)}
+  @keyframes mq{to{transform:translateX(-50%)}}
+  iframe{width:100%;height:min(70vh,560px);border:1px solid #3a3685;border-radius:20px;background:#fff;margin-top:24px}
+  footer{position:relative;z-index:2;text-align:center;color:var(--mute);padding:40px 5vw}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#name span{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="loader"><b><span id="pct">0</span>%</b><i><span id="lb"></span></i></div>
+<div id="bar"></div><div id="cur"></div>
+<canvas id="bg"></canvas>
+
+<nav><b>PRATIK</b><div><a href="#topics">Topics</a><a href="#pricing">Prices</a><a href="#pdf">PDF</a><a href="#contact">Contact</a></div></nav>
+
+<main>
+  <section id="home">
+    <h1 id="name" aria-label="Pratik"></h1>
+    <p class="sub">Main <em id="typed"></em></p>
+    <div><a class="btn mag" href="#pricing">Prices dekho</a><a class="btn ghost mag" href="#pdf">PDF kholo</a></div>
+    <div class="hint"><s></s>Scroll now and explore more </div>
+  </section>
+
+  <!-- ===== TOPICS: yahan apne topics likho ===== --> 
+  <section id="topics"> 
+    <h2>My topics</h2>
+    <p class="lead"> your's problme my solution trick, one time payment all things is solved after buy this.</p>
+    <div class="grid">
+      <div class="tilt"><div class="ic">✦</div><h3>Topic 1</h3><p>Yahan apne pehle topic ke baare me 2 line likho.</p></div>
+      <div class="tilt"><div class="ic">◆</div><h3>Topic 2</h3><p>Yahan dusre topic ke baare me likho.</p></div>
+      <div class="tilt"><div class="ic">●</div><h3>Topic 3</h3><p>Yahan teesre topic ke baare me likho.</p></div>
+    </div>
+  </section>
+
+  <div class="marq"><div id="mq"></div></div>
+
+  <!-- ===== PRICES: data-count me number, href me payment link ===== -->
+  <section id="pricing">
+    <h2>Prices</h2>
+    <p class="lead">Apna plan chuno. Payment secure link par hota hai.</p>
+    <div class="grid">
+      <div class="tilt"><h3>Basic</h3>
+        <div class="price">₹<span data-count="29">149</span> <small>/ project</small></div>
+        <ul><li>Feature ek</li><li>Feature do</li></ul>
+        <a class="btn pay mag" href="YAHAN-PAYMENT-LINK-DAALO" target="_blank" rel="noopener">BUY NOW</a></div>
+      <div class="tilt pop"><span class="tag"></span><h3>Standard</h3>
+        <div class="price">₹<span data-count="149">0</span> <small>/ project</small></div>
+        <ul><li>Basic ka sab kuch</li><li>Feature teen</li><li>Feature char</li></ul>
+        <a class="btn pay mag" href="YAHAN-PAYMENT-LINK-DAALO" target="_blank" rel="noopener">BUY NOW</a></div>
+      <div class="tilt"><h3>Premium</h3>
+        <div class="price">₹<span data-count="349">0</span> <small>/ project</small></div>
+        <ul><li>Standard ka sab kuch</li><li>Feature paanch</li></ul>
+        <a class="btn pay mag" href="YAHAN-PAYMENT-LINK-DAALO" target="_blank" rel="noopener">BUY NOW</a></div>
+    </div>
+  </section>
+
+  <!-- ===== PDF: file ka naam portfolio.pdf rakho ===== -->
+  <section id="pdf">
+    <h2>Meri PDF</h2>
+    <p class="lead">Read Here Main Topics I Coverd In This Pdf.</p>
+    <div><a class="btn mag" href="portfolio.pdf" download>PDF download karo</a></div>
+    <iframe srcdoc="
+
+`Ready to take control of your life and become a stronger version of yourself? <br> <br> 
+
+This eBook is a practical guide to understanding addiction, <br> 
+
+breaking unhealthy patterns, <br> and building habits that last. <br> <br> You’ll learn how to stay consistent—even when motivation fades—set meaningful goals, and make progress through small, manageable steps.<br> <br>  Whether you’re starting from zero or trying to get back on track, <br> this guide will help you rewire your mindset, overcome setbacks, and move toward becoming the person you want to be. Your journey from zero to hero begins with one decision: start today. <br> <br> <br> NOW THIS IS YOURE CHOISE UPGRADE YOURSELF OR NOT LETS GOOO... CHAMPION'S................. 
+`" ></iframe> 
+  </section> 
+
+  <section id="contact">
+    <h2>Baat karte hain.</h2>
+    <p class="lead"> https://www.instagram.com/relatablepratik/ </p>
+    <div><a class="btn mag" href="pratikpratik2006@gmail.com">Email bhejo</a></div>
+  </section>
+</main>
+<footer>© 2026 Pratik</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=s=>document.querySelector(s), calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* ===== LOADER ===== */
+let n=0;const iv=setInterval(()=>{n=Math.min(100,n+Math.ceil(Math.random()*9));
+  $('#pct').textContent=n;$('#lb').style.width=n+'%';
+  if(n>=100){clearInterval(iv);setTimeout(()=>document.body.classList.add('go'),250)}},60);
+
+/* ===== NAAM KE LETTERS ===== */
+'PRATIK'.split('').forEach((ch,i)=>{const s=document.createElement('span');s.textContent=ch;s.style.setProperty('--i',i);$('#name').appendChild(s)});
+
+/* ===== TYPING: lines badlo ===== */
+const lines=['creator hoon.',' aap logo ko improove kerta hu.','apni duniya bana raha hoon.'];
+let li=0,ci=0,del=false;
+(function type(){const t=lines[li];$('#typed').textContent=t.slice(0,ci);
+  if(!del&&ci<t.length){ci++;setTimeout(type,70)}else if(!del){del=true;setTimeout(type,1400)}
+  else if(ci>0){ci--;setTimeout(type,30)}else{del=false;li=(li+1)%lines.length;setTimeout(type,300)}})();
+
+/* ===== MARQUEE ===== */
+const words=['3D','Animation','Design','Creator','Portfolio','Pratik'];
+$('#mq').innerHTML=[...words,...words,...words,...words].map(w=>`<span>${w}</span>`).join('');
+
+/* ===== CURSOR + MAGNETIC BUTTONS + TILT ===== */
+let cx=0,cy=0,tx=0,ty=0;
+addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY});
+(function c(){cx+=(tx-cx)*.18;cy+=(ty-cy)*.18;$('#cur').style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(c)})();
+document.querySelectorAll('a,.tilt').forEach(el=>{
+  el.addEventListener('mouseenter',()=>$('#cur').classList.add('big'));
+  el.addEventListener('mouseleave',()=>$('#cur').classList.remove('big'))});
+document.querySelectorAll('.mag').forEach(b=>{
+  b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect();
+    b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`});
+  b.addEventListener('mouseleave',()=>b.style.transform='')});
+document.querySelectorAll('.tilt').forEach(c=>{
+  const base=c.classList.contains('pop')?' scale(1.04)':'';
+  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    c.style.transform=`perspective(800px) rotateY(${x*16}deg) rotateX(${-y*16}deg) translateZ(12px)${base}`;
+    c.style.setProperty('--gx',(x+.5)*100+'%');c.style.setProperty('--gy',(y+.5)*100+'%')});
+  c.addEventListener('mouseleave',()=>c.style.transform='')});
+
+/* ===== PRICE COUNT-UP ===== */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;
+  const s=e.target,end=+s.dataset.count,t0=performance.now();
+  (function st(t){const p=Math.min((t-t0)/1500,1);s.textContent=Math.round(end*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(st)})(t0);
+  io.unobserve(s)}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(s=>io.observe(s));
+
+/* ===== 3D DUNIYA: scroll karo to camera aage udta hai ===== */
+const R=new THREE.WebGLRenderer({canvas:$('#bg'),antialias:true});
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.setClearColor(0x07061a);
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x07061a,.03);
+const cam=new THREE.PerspectiveCamera(60,1,.1,120);
+
+// taare (rang z ke hisaab se badalta hai)
+const N=3200,P=new Float32Array(N*3),C=new Float32Array(N*3),col=new THREE.Color();
+for(let i=0;i<N;i++){const z=6-Math.random()*70,a=Math.random()*6.283,r=3+Math.random()*13;
+  P.set([Math.cos(a)*r,Math.sin(a)*r,z],i*3);col.setHSL(.74-(-z/70)*.5,.9,.65);C.set([col.r,col.g,col.b],i*3)}
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(P,3));g.setAttribute('color',new THREE.BufferAttribute(C,3));
+scene.add(new THREE.Points(g,new THREE.PointsMaterial({size:.07,vertexColors:true,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false})));
+
+// har section ke peeche ek 3D cheez
+const objs=[];
+function add(geo,color,x,z,s=1){const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color,wireframe:true,transparent:true,opacity:.75}));
+  m.position.set(x,0,z);m.scale.setScalar(s);m.userData.x=x;scene.add(m);objs.push(m);return m}
+add(new THREE.TorusKnotGeometry(1.3,.4,150,20),0x7c5cff,3.2,0);
+add(new THREE.IcosahedronGeometry(2.2,1),0x22d3ee,-4.2,-14);
+add(new THREE.IcosahedronGeometry(.9,0),0xff4d8d,4.5,-14);
+[0,1,2].forEach(i=>{const r=add(new THREE.TorusGeometry(2+i*.6,.04,12,90),0xff4d8d,4,-28);r.rotation.set(i,i*.7,0)});
+add(new THREE.OctahedronGeometry(2.4),0x7c5cff,-4.2,-42);add(new THREE.OctahedronGeometry(1.1),0x22d3ee,-4.2,-42);
+add(new THREE.SphereGeometry(2.6,28,18),0x22d3ee,0,-56);
+
+let mx=0,my=0,prog=0,sm=0;
+addEventListener('mousemove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+function size(){R.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
+  objs.forEach(o=>o.position.x=innerWidth<800?o.userData.x*.25:o.userData.x)}
+addEventListener('resize',size);size();
+function scroll(){prog=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight);$('#bar').style.transform=`scaleX(${prog})`}
+addEventListener('scroll',scroll);scroll();
+
+(function loop(t){requestAnimationFrame(loop);t*=.001;
+  sm+=(prog-sm)*.06;                       // smooth scroll
+  cam.position.z=7-sm*56;
+  cam.position.x+=(mx*2-cam.position.x)*.05;cam.position.y+=(-my*1.5-cam.position.y)*.05;
+  cam.rotation.z=Math.sin(sm*7)*.06;cam.lookAt(cam.position.x*.3,cam.position.y*.3,cam.position.z-10);
+  if(!calm)objs.forEach((o,i)=>{o.rotation.x+=.003*(1+i%3);o.rotation.y+=.004;o.position.y=Math.sin(t+i)*.3});
+  R.render(scene,cam)})(0);
+</script>
+</body>
+</html>
